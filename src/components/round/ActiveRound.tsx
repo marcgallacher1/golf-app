@@ -10,7 +10,7 @@ const DEFAULT_PARS_9  = [4,4,3,4,5,4,3,4,5]
 export default function ActiveRound({ round, holeCount, onComplete }: {
   round: Round
   holeCount: 9 | 18
-  onComplete: () => void
+  onComplete: (totalScore: number) => void
 }) {
   const { saveHole, completeRound } = useRound()
   const [currentHole, setCurrentHole] = useState(1)
@@ -37,7 +37,7 @@ export default function ActiveRound({ round, holeCount, onComplete }: {
     if (currentHole === holeCount) {
       const total = updated.reduce((a, h) => a + (h.score ?? 0), 0)
       await completeRound(round.id, total)
-      onComplete()
+      onComplete(total)
     } else {
       setCurrentHole(h => h + 1)
     }

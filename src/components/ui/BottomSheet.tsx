@@ -1,4 +1,4 @@
-import { ReactNode } from 'react'
+import type { ReactNode } from 'react'
 
 export default function BottomSheet({ open, onClose, children }: {
   open: boolean

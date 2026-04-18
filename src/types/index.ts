@@ -35,7 +35,7 @@ export type PlayerStats = {
   bestHoles: string
 }
 
-export type Tab = 'home' | 'play' | 'history' | 'profile'
+export type Tab = 'home' | 'play' | 'caddy' | 'history' | 'profile'
 
 export type Profile = {
   id: string

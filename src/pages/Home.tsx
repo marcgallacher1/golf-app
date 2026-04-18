@@ -1,5 +1,6 @@
 import { useStats } from '../hooks/useStats'
 import StatCard from '../components/ui/StatCard'
+import CaddyAdvice from '../components/caddy/CaddyAdvice'
 
 export default function Home({ onStartRound }: { onStartRound: () => void }) {
   const { stats, rounds, loading } = useStats()
@@ -53,6 +54,13 @@ export default function Home({ onStartRound }: { onStartRound: () => void }) {
           >
             Start New Round
           </button>
+
+          {/* Pre-round AI briefing */}
+          {stats && stats.roundsPlayed >= 3 && (
+            <div className="bg-slate-800 rounded-2xl p-5">
+              <CaddyAdvice stats={stats} mode="pre-round" />
+            </div>
+          )}
 
           {/* Recent rounds */}
           {recentRounds.length > 0 && (

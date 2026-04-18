@@ -5,6 +5,7 @@ import Home from './pages/Home'
 import Play from './pages/Play'
 import History from './pages/History'
 import Profile from './pages/Profile'
+import Caddy from './pages/Caddy'
 import BottomNav from './components/ui/BottomNav'
 import type { Tab } from './types'
 
@@ -27,6 +28,7 @@ function AppRoutes() {
       <div className="flex-1 overflow-y-auto pb-20">
         {tab === 'home' && <Home onStartRound={() => setTab('play')} />}
         {tab === 'play' && <Play />}
+        {tab === 'caddy' && <Caddy />}
         {tab === 'history' && <History />}
         {tab === 'profile' && <Profile />}
       </div>

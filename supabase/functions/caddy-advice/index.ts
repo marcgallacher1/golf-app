@@ -11,9 +11,42 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { stats, round, mode } = await req.json()
+    const body = await req.json()
+    const { mode } = body
 
     const anthropic = new Anthropic({ apiKey: Deno.env.get('ANTHROPIC_API_KEY')! })
+
+    if (mode === 'chat') {
+      const { messages, stats } = body
+
+      const system = stats
+        ? `You are an expert golf coach and caddy. You know this player well:
+- Handicap index: ${stats.handicapIndex}
+- Fairways hit: ${stats.fairwayPct}%
+- Greens in regulation: ${stats.girPct}%
+- Avg putts per round: ${stats.avgPutts}
+- Scoring average: ${stats.scoringAverage}
+- Recent trend: ${stats.trend}
+- Weakest holes: ${stats.weakestHoles}
+
+Give advice that's specific to their game. Be direct and practical — like a caddy between shots, not a textbook. Keep responses concise (3-5 sentences max) unless they ask for detail.`
+        : `You are an expert golf coach and caddy. Give direct, practical golf advice. Keep responses concise (3-5 sentences max) unless the player asks for detail.`
+
+      const message = await anthropic.messages.create({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 500,
+        system,
+        messages,
+      })
+
+      const reply = (message.content[0] as { type: string; text: string }).text
+      return new Response(JSON.stringify({ reply }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      })
+    }
+
+    // pre-round / post-round modes
+    const { stats, round } = body
 
     const question = mode === 'pre-round'
       ? 'Give me a game plan for today. What should I focus on to shoot my best round?'
